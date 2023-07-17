@@ -1,0 +1,7 @@
+baseURL = 'http://weik.de/'
+languageCode = 'en-us'
+title = "cloudsftp's Blog"
+theme = 'ananke'
+
+[markup.goldmark.renderer]
+unsafe= true
