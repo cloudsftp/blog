@@ -7,7 +7,8 @@ draft: true
 # Hello
 ## 哈罗
 
-![hello world png](hello-world.png)
+![hello world png](/posts/hello-world/images/hello.png)
+
 
 This is the first post in my blog.
 It was inspired by a friend of my mother asking me to help with a static website.
