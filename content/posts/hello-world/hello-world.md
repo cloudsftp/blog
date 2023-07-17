@@ -1,7 +1,6 @@
 ---
 title: "Hello World"
 date: 2023-07-17T22:50:10+02:00
-draft: true
 ---
 
 # Hello
