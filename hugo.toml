@@ -1,4 +1,4 @@
-baseURL = 'http://weik.de/'
+baseURL = 'https://blog.cloudsftp.de/'
 languageCode = 'en-us'
 title = "cloudsftp's Blog"
 theme = 'ananke'
