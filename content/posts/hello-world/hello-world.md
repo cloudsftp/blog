@@ -5,7 +5,7 @@ date: 2023-07-17T22:50:10+02:00
 
 # 哈罗
 
-![hello world png](/posts/hello-world/images/hello.png)
+{{< image src="/posts/hello-world/images/hello.png" alt="Hello, World!" position="center" style="border-radius: 8px;" >}}
 
 
 This is the first post in my blog.
