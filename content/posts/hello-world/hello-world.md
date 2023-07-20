@@ -3,8 +3,7 @@ title: "Hello World"
 date: 2023-07-17T22:50:10+02:00
 ---
 
-# Hello
-## 哈罗
+# 哈罗
 
 ![hello world png](/posts/hello-world/images/hello.png)
 
