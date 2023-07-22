@@ -22,4 +22,4 @@ I think this is very promising.
 Today, I then looked into hosting it on GitHub Pages.
 It seems straight forward enough.
 
- <p style='text-align: right;'> Wish me luck. </p>
+<p style='text-align: right;'> Wish me luck. </p>
