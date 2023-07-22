@@ -1,8 +1,14 @@
 ---
 title: "The Thing With Window Managers"
 date: 2023-07-21T22:27:13+02:00
-tags: ["Window Manager", "AwesomeWM", "NVIDIA"]
 draft: true
+toc: false
+images:
+    - /posts/awesome-wm-init/initial.png
+tags: 
+    - Window Manager
+    - AwesomeWM
+    - NVIDIA
 ---
 
 {{< image src="/posts/awesome-wm-init/initial.png" alt="Default Awesome WM configuration on OpenSUSE" position="center" >}}
@@ -122,7 +128,8 @@ When I came back and just wanted to kick back and relax, maybe watch some anime,
 
 {{< image src="/posts/awesome-wm-init/login.jpg" alt="TTY Login Screen" position="center" style="border-radius: 8px;" >}}
 
-__Not Fun.__
+<p style='text-align: center;'> <b> Not Fun. </b> </p>
+
 Reconfiguring X was a pain since I was not exactly sober.
 But now I know how to do it in the future.
 Hopefully, I won't need to do it and will remember to _back up_ the working configuration in the future.
