@@ -49,4 +49,8 @@ paginate     = 10
     url        = "/posts"
 
 [markup.goldmark.renderer]
-unsafe= true
+    unsafe= true
+
+[markup]
+  [markup.highlight]
+    style = "github-dark"
