@@ -27,12 +27,13 @@ paginate     = 10
 
 [languages]
   [languages.en]
-    title = "cloudsftp's Blog"
-    subtitle = "Math Ethusiast"
-    keywords = "Open Source Software"
-    #copyright = ''
-    copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
-    readOtherPosts = "Read other posts"
+    [languages.en.params]
+      title = "cloudsftp's Blog"
+      subtitle = "Math Ethusiast"
+      keywords = "Open Source Software"
+      #copyright = ''
+      copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
+      readOtherPosts = "Read other posts"
 
     [languages.en.params.logo]
       logoText = "cloudsftp@website$ cd ~"
