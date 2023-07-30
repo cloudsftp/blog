@@ -9,8 +9,8 @@
                <img src="{{ .Site.Params.Portrait.Path }}" class="circle" alt="{{ .Site.Params.Portrait.Alt }}" style="max-width:{{ .Site.Params.Portrait.MaxWidth }}" />
             {{ end }}
 
-            <h1>{{ .Site.Title }}</h1>
-            <p>{{ .Site.Params.homeSubtitle }}</p>
+            <h1 {{ if .Site.Params.backgroundImage }} class="on-image" {{ end }}>{{ .Site.Title }}</h1>
+            <p {{ if .Site.Params.backgroundImage }} class="on-image" {{ end }}>{{ .Site.Params.homeSubtitle }}</p>
 
             {{- with .Site.Params.social }}
                 <div>
