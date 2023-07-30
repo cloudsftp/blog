@@ -1,4 +1,4 @@
-baseURL = 'https://blog.cloudsftp.de/'
+baseURL = 'https://www.cloudsftp.de/'
 languageCode = 'en-us'
 title = "clouds' Blog"
 theme = 'hello-friend-ng'
