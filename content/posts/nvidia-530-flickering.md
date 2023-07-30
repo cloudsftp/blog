@@ -13,3 +13,8 @@ tags:
 - rebuild grub
     - openSuse: `sudo grub2-mkconfig -o /boot/grub2/grub.cfg`
 
+This reduced the issue, but the screen does still flicker from time to time.
+
+## Step 2
+
+
