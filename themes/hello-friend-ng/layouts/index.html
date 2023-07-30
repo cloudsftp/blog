@@ -10,8 +10,7 @@
             {{ end }}
 
             <h1>{{ .Site.Title }}</h1>
-
-            {{ partial "subtitle.html" . }}
+            <p>{{ .Site.Params.homeSubtitle }}</p>
 
             {{- with .Site.Params.social }}
                 <div>

@@ -3,8 +3,6 @@ title: "The Thing With Window Managers"
 date: 2023-07-21T22:27:13+02:00
 draft: false
 toc: false
-images:
-    - /posts/awesome-wm-init/initial.png
 tags: 
     - Window Manager
     - AwesomeWM
