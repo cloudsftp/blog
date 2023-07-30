@@ -1,3 +1,3 @@
 {{- with .Site.Params.homeSubtitle }}
-    <p>{{.}}</p>
+    <p {{ if .Site.Params.backgroundImage }} class="on-image" {{ end }}>{{.}}</p>
 {{- end }}

@@ -1,12 +1,12 @@
 baseURL = 'https://blog.cloudsftp.de/'
 languageCode = 'en-us'
-title = "cloudsftp's Blog"
+title = "clouds' Blog"
 theme = 'hello-friend-ng'
 paginate     = 10
 
 [params]
-  dateform        = "Jan 2, 2006"
-  dateformShort   = "Jan 2"
+  dateform        = "2006-01-02"
+  dateformShort   = "01-02"
   dateformNum     = "2006-01-02"
   dateformNumTime = "2006-01-02 15:04"
 
@@ -16,9 +16,11 @@ paginate     = 10
   enableGlobalLanguageMenu = false
 
   # Metadata mostly used in document's head
-  description = "cloudsftp's blog and personal website"
+  description = "clouds' blog and personal website"
   keywords = "homepage, blog, cloud, linux, OSS, open source"
   images = [""]
+
+  backgroundImage = "background-images/nebula.jpg"
 
 [taxonomies]
     category = "blog"
@@ -28,8 +30,8 @@ paginate     = 10
 [languages]
   [languages.en]
     [languages.en.params]
-      title = "cloudsftp's Blog"
-      subtitle = "Math Ethusiast"
+      title = "clouds' Blog"
+      subtitle = "Tales from da Lab"
       keywords = "Open Source Software"
       #copyright = ''
       copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
@@ -45,9 +47,14 @@ paginate     = 10
 
   # And you can even create generic menu
   [[menu.main]]
-    identifier = "blog"
-    name       = "Blog"
-    url        = "/posts"
+    identifier  = "blog"
+    name        = "Blog"
+    url         = "/posts"
+  
+  [[menu.main]]
+    identifier  = "about"
+    name        = "About"
+    url         = "/about"
 
 [markup.goldmark.renderer]
     unsafe= true
