@@ -62,3 +62,7 @@ paginate     = 10
 [markup]
   [markup.highlight]
     style = "github-dark"
+
+[Author]
+    name = "Fabian Weik"
+    email = "fabian.weik@protonmail.com"
