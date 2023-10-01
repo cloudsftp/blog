@@ -3,9 +3,9 @@ title: "Hello World"
 date: 2023-07-17T22:50:10+02:00
 ---
 
-# 哈罗
+<!--- # 哈罗-->
 
-{{< image src="/posts/hello-world/images/hello.png" alt="Hello, World!" position="center" style="border-radius: 8px;" >}}
+{{< image src="/posts/hello-world/images/hello-own.png" alt="Hello, World!" position="center" style="border-radius: 8px;" >}}
 
 
 This is the first post in my blog.

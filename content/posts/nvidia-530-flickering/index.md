@@ -67,7 +67,7 @@ Now the flickering is almost completely gone.
 I have been sitting here for 20 minutes without a single flicker.
 Sometimes it flickers multiple times per minute tho.
 
-The moral of the story is not to use a NVIDIA fraphics card in your Linux setup.
+The moral of the story is not to use an NVIDIA graphics card in your Linux setup.
 In the wise words of Linus Torvalds: [NVIDIA, fuck you!](https://www.youtube.com/watch?v=iYWzMvlj2RQ)
 
 <div style='text-align: center; font-size: 20pt'>
