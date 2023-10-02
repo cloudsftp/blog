@@ -1,7 +1,7 @@
 ---
-title: "How Auto-Formatters Could Save Lives"
+title: "How Auto-formatters Save Lives"
 date: 2023-10-01T20:59:56+02:00
-draft: true
+draft: false
 toc: false
 images:
 tags:
@@ -9,20 +9,19 @@ tags:
 ---
 
 I know what you are thinking.
-How in the world should a auto-formatter help safe lives.
-Well maybe I exaggerated a little --- But I think auto-formatters help reduce a huge number of bugs without the program being run.
-"How should they do this, if they do not change the semantics" you may ask.
+How in the world should an auto-formatter safe lives.
+Well, maybe I exaggerated a little --- But I think auto-formatters reduce many bugs without running the program.
+"How should they do this if they do not change the semantics," you may ask.
 Well, let me explain.
 
-### A Shell-formatter anectode
+### A Shell-formatter anecdote
 
-Recently I did some maintenance on the `reSnap` project again.
-A user opened a pull request fixing the screen on newer version of the reMarkable software.
-https://github.com/cloudsftp/reSnap/pull/14
-I had a quick look at the changes on my phone since I was not at my computer.
+Recently, I did some maintenance on the [reSnap](https://github.com/cloudsftp/reSnap) project.
+A user had opened a [pull request](https://github.com/cloudsftp/reSnap/pull/14) fixing screenshots on newer version of the reMarkable software.
+I looked at the changes on my phone, since I was not at my computer.
 As far as I could tell, the changes were good --- they even updated the documentation in the `README.md`.
-But one thing bugged me, in the following part of the diff, they used `byte_correction` and `byte` as a boolean variable which probably should have been the same.
-I thought to myself "Alright, I just will approve the CI run and fix the parameter later..."
+But one thing bugged me.
+In the following part of the diff, they used `byte_correction` and `byte` as a boolean variable, which probably should have been the same.
 
 ```diff
 ...
@@ -51,10 +50,15 @@ index 6dd4ec9..6278b84 100755
 ...
 ```
 
-### The Auto-Formatter is not Happy
+I thought: "Alright, I will approve the CI run and fix the parameter later..."
 
-Minutes later I get an email, that the CI run failed... Weird.
-The CI just runs a shell formatter, so I thought "Yeah he just did something different and the formatter is being pedantic about it -- Let's see..."
+
+<div style='text-align: center; font-size: 16pt'>
+    <strong> The auto-formatter was not happy. </strong>
+</div>
+
+Minutes later, I got an e-mail that the CI run failed... **Huh.**
+The CI only runs a shell formatter, so I thought: "Yeah, he just did something slightly different, and the formatter is being pedantic about it --- Let's see..."
 
 ```diff
 ...
@@ -76,44 +80,73 @@ The CI just runs a shell formatter, so I thought "Yeah he just did something dif
 ...
 ```
 
-"Ok weird, I would have indented it the same way.
-As a matter of fact, I *did* indent all the cases exactly the same why is the formatter hating on my boy?"
-It turns out that he did in-fact make a mistake:
-He forgot to add `;;` after the line with `shift` to end the branch of the `switch`-statement.
+"Ok, weird. I would have indented it the same way.
+As a matter of fact, I *did* indent all the cases exactly the same
+--- why is the formatter hating on this contributor?"
+It turns out that he, in-fact, made a mistake:
+He forgot to add `;;` after the line with `shift` to end the branch of the `case` statement.
 
-Otherwise, the following error when executing script with any parameters:
+This line is important because otherwise the `case` statement blows up.
+This `case` statement is responsible for parsing the command-line arguments.
+So, the script would crash when any argument was passed to it.
+
 ```out
 ./reSnap.sh: line 49: syntax error near unexpected token `)'
 ./reSnap.sh: line 49: `  -p | --og-pixel-format)'
 ```
 
-- Reminded me of different story 
-- At prev job, azubi confused why if statement not working
-- Added ;
-- Formatter would have saved him
-```C
+I accepted his contribution and proceeded to fix the small mistake.
+
+### Another Story
+
+This situation reminded me of another situation that happened at my previous job.
+A new trainee (also called "Azubi" here) was learning C++ as their first language --- a horrible choice, honestly.
+One day, when I walked into the room, a senior engineer stood beside him, looking as confused as he.
+They called me over to look at the code and give my input on what was wrong with it.
+At first glance, it looked great and executed, but they expected the program to print something, and it did not.
+So, I looked at the print statement in question again and saw the mistake.
+
+```C++
 ...
 
 if (cond);
-    printf("Hello, World!");
+    cout << "Hello World" << endl;
 
 ...
 ```
 
-The auto-formatter would have de-indented the line with `printf` on it, which might have given a clue to the Azubi, that he did something wrong.
+He put a semicolon after the `if` statement.
 
+If he had an auto-formatter running on every save, he maybe would have seen the mistake since the line would have been de-indented every time he saved the document.
 
-### Why are they useful?
+```C++
+...
 
-- Similar symbols might have very different semantics
-- The syntax is very similar for the human eye
-- If the auto-formatted code looks different from expected, it probably will behave different from expected
+if (cond);
+cout << "Hello World" << endl;
 
-Everyone should use an auto-formatter.
-- years prior at my prev job
-- talked about go and how nice it is that the autoformatter is installed and enabled by default by vscode
-- colleague said "Well that's no good reason --- you can have an auto-formatter in every language"
-- But the main thing was that it was set up and enabled automatically
-- Just as with rust and their lsp even in nvim
-- Many other lsps now do this too
-- But setting up prettier configs or something similar is a pain to get working with specific lsps - maybe im just a noob
+...
+```
+
+Also, this makes a strong case for always using curly braces for `if` statements and loops, even when they only have one line.
+Especially when the code is in a beginner tutorial!
+This is a whole other story --- just enforce curly braces at the linter level.
+
+## Why are they useful?
+
+You saw two examples where auto-formatters helped --- or might have helped --- discover bugs without executing the program.
+But the question from the beginning remains: "How can they do this when they don't change or even analyze the semantics of the program"?
+
+My explanation for this phenomenon is the following.
+The formatter only looks at the syntax, but syntax that looks similar to our eyes may be very different, and therefore also the semantics of that syntax.
+This means:
+
+<div style='text-align: center; font-size: 14pt'>
+    <strong>
+        If the code looks weird after the auto-formatter changed it, <br>
+        it probably is
+    </strong>
+</div>
+
+I think everyone should use an auto-formatter.
+Additionally to guiding your attention to possible bugs, it also automates indentation and line breaks.
