@@ -53,6 +53,8 @@ So I looked for another tutorial and found a [great one](https://youtu.be/fcDFnt
 
 ![high definition snowflakes](HighDefinitionSnowflakes.jpg)
 
+### GPU vs CPU Rendering
+
 The only problem is that he uses a non-standard render engine called "cycles".
 This render engine takes a lot longer than the standard render engine.
 On my PC, each frame now took almost 3 seconds instead of 0.4 as with the hexagon shaped snowflakes.
@@ -64,22 +66,49 @@ Turns out the Radeon driver does not support HIP, which is needed for rendering 
 
 Time to search the interwebs for information on HIP...
 
+### Trying to Install HIP
 
-- stumble upon reddit post
-- first time using opi to install
-    - libffi_7
-    - libpython3_6m1
+At first, my Google-Fu failed me.
+But the I stumbeled across [this reddit post](https://www.reddit.com/r/openSUSE/comments/13vejus/blender_isnt_recognizing_my_radeon_6750xt/) where a user in the comments proposed a solution to my problem.
+I followed the steps, which I had to adjust a little because of the age of the post and comments.
+It didn't work, so I wrote a comment asking for help after trying different things myself.
 
-- installing additional packages
-    - hip-amd-runtime
-    - hipsparselt + -devel + every asan version of already installed hip related packages
-    - 
+During this conversation I learned about [opi](https://github.com/openSUSE/opi) for the first time.
+It stands for OBS Package Installer, where OBS does *not* stand for Open Broadcast Service, but Open Build Service.
+The Open Build Service allows users to host community packages for openSUSE online.
+Previously, I added the repositories manually to install such packages, but this tool automates this process completely.
+You just type in the program you want to install, opi will list all repositories that provide this software and installs the repository and the software after selecting the repository you want to use.
 
-- solution:
-    - missed role render
+I used it to install 2 missing libraries:
+- libffi_7
+- libpython3_6m1
 
-- blender still not accepting
-gave up
+Now, hip did install successfully.
+But I still could not select it in blender...
+
+I then went ahead and tried installing different packages that were provided by AMD in the same repository but not included in the instructions in the comments of the reddit post, such as
+- hip-amd-runtime
+- hipsparselt, hipsparselt-devel
+- every asan version of already installed hip related packages
+
+Nothing seemed to work.
+In the meantime I was also chatting with the legend that provided the steps thus far.
+He suggested that I run `rocminfo` and have a look at the output.
+
+```
+ROCk module is loaded
+Unable to open /dev/kfd read-write: Permission denied
+fabi is not member of "render" group, the default DRM access group.
+Users must be a member of the "render" group or another DRM access group
+in order for ROCm applications to run successfully.
+```
+
+So in the end, the solution was to add myself to the render group...
+After a quick `sudo usermod -aG render fabi`, rocm was finally up and running.
+But blender still did not allow me to select HIP for GPU rendering :(
+At this point I gave up.
+
+### Thinking Outside the Box
 
 - old graphics card inside server
 - install gnome, nvidia drivers and blender on server
