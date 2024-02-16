@@ -9,8 +9,12 @@ tags:
   - Awesome
 ---
 
-- New keyboard
-- now w rgb
+I got a new Keyboard!
+This time with RGB.
+I am not a big fan - but it is important for the following story.
+So gather around.
+
+
 - got sick of klickie-buntie configurator while configuring colors
 - tried to compile keymap with QMK for the second time
 - got it working and configured my new keymap
@@ -32,4 +36,25 @@ This kind of blew my mind, you can execute almost arbitrary C code on any key ev
 - Implement for all 10 workspaces
 - beautify
 - finished!!!
+
+
+- implementing it for ergodox ez
+- for some reason, send string wont compile
+- test SS_TAP, wont compile either
+- opt for manually setting and unsetting key instead of hunting down compiler errors
+
+
+new use case discovered:
+automatically generate uuidv4
+
+Set out to do it.
+Implemet the uuid generation code - relatively ez.
+try to get some entropy from <time.h> in the standard library - alway returns the same thing
+
+Need other way.
+Find [timer.h of TMK](https://github.com/tmk/tmk_keyboard/blob/master/tmk_core/common/timer.h).
+use it for the seed - done.
+
+You can use it too!
+[Library with documentation](https://github.com/cloudsftp/qmk-uuid)
 
