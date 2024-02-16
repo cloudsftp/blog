@@ -1,6 +1,6 @@
 ---
-title: "QMK is amazing"
-date: 2024-2-5:10:42+02:00
+title: "QMK is awesome"
+date: 2024-2-16:10:42+02:00
 draft: true
 toc: false
 images:
@@ -14,10 +14,16 @@ This time with RGB.
 I am not a big fan - but it is important for the following story.
 So gather around.
 
+The keyboard in question is the [ZSA Voyager](https://www.zsa.io/voyager/).
+I chose this because it is made with portability in mind and I want to take it to and from work once in a while.
+With my other split keyboard this was not really safe.
 
-- got sick of klickie-buntie configurator while configuring colors
-- tried to compile keymap with QMK for the second time
-- got it working and configured my new keymap
+While configuring the keyboard with [Oryx, the ZSA configurator](https://configure.zsa.io/), I grew more and more frustrated.
+Since setting the color of the LEDs is very tedious.
+I tried to configure my other split keyboard with QMK in C directly some time ago, but couldn't quite figure it out...
+But this time I had better motivation, so I tried again.
+
+
 
 - one layer switching to workspace numpad-like
 - new: one layer moving window to workspace numpad-like (awkward before bc of shift)
