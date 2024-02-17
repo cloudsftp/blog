@@ -18,10 +18,14 @@ The keyboard in question is the [ZSA Voyager](https://www.zsa.io/voyager/).
 I chose this because it is made with portability in mind and I want to take it to and from work once in a while.
 With my other split keyboard this was not really safe to do.
 
+## Using QMK for the first time (successfully)
+
 While configuring the keyboard with [Oryx, the ZSA configurator](https://configure.zsa.io/), I grew more and more frustrated.
 Since setting the color of the LEDs is very tedious.
 I tried to configure my other split keyboard with QMK in C directly some time ago, but couldn't quite figure it out...
 But this time I had better motivation, so I tried again.
+
+todo: introduction use case first then discovery of macros
 
 I actually succeeded! (todo: styling)
 I styled my RGB like I wanted and looked around the QMK documentation.
@@ -30,8 +34,9 @@ This was very exciting and I immediately had a use case foe rhis feature:
 
 Sometimes, I open a GUI application from the command line, for example if i installed a new program and want to test it, before setting up the `.desktop` file.
 The new window then opens next to my terminal, but I don't need the terminal then.
-So i move the new window to a new workspace and then switch to that workspace.
-With my new configuration this was not that awkward anymore, but those were still two key presses, which could be automated.
+So I move the new window to a new workspace and then switch to that workspace.
+With my new configuration this was not that awkward anymore thanks to introducing an extra layer instead of bending my left pinky to reach the shift key.
+But those were still two key presses, which could be automated.
 So I did exactly that.
 Now I have three layers for switching workspaces:
 - one for switching workspaces,
@@ -40,9 +45,6 @@ Now I have three layers for switching workspaces:
 
 todo: insert code here (only third layer)
 
-
-- one layer switching to workspace numpad-like
-- new: one layer moving window to workspace numpad-like (awkward before bc of shift)
 
 then i thought:
 It would be nice to hold down both keys to execute both things one after the other:
@@ -67,7 +69,7 @@ This kind of blew my mind, you can execute almost arbitrary C code on any key ev
 
 I showed this feature of my new keyboard to a colleague that also uses QMK for his keyboard.
 But he was only mildly impressed.
-I remember saying: "You can execute arbitrary C code on rhis thing. The possibilities are endless!"
+I remember saying: "Since you can execute arbitrary C code, the possibilities are endless!"
 To which he replied: "Well but what use cases are there besides fun and games."
 And I mean he is right.
 
