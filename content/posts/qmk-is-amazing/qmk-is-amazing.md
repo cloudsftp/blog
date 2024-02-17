@@ -11,18 +11,34 @@ tags:
 
 I got a new Keyboard!
 This time with RGB.
-I am not a big fan - but it is important for the following story.
+I am not a big fan - but it is an important detail for the following story.
 So gather around.
 
 The keyboard in question is the [ZSA Voyager](https://www.zsa.io/voyager/).
 I chose this because it is made with portability in mind and I want to take it to and from work once in a while.
-With my other split keyboard this was not really safe.
+With my other split keyboard this was not really safe to do.
 
 While configuring the keyboard with [Oryx, the ZSA configurator](https://configure.zsa.io/), I grew more and more frustrated.
 Since setting the color of the LEDs is very tedious.
 I tried to configure my other split keyboard with QMK in C directly some time ago, but couldn't quite figure it out...
 But this time I had better motivation, so I tried again.
 
+I actually succeeded! (todo: styling)
+I styled my RGB like I wanted and looked around the QMK documentation.
+There i found [macros](https://github.com/qmk/qmk_firmware/blob/master/docs/feature_macros.md#macros).
+This was very exciting and I immediately had a use case foe rhis feature:
+
+Sometimes, I open a GUI application from the command line, for example if i installed a new program and want to test it, before setting up the `.desktop` file.
+The new window then opens next to my terminal, but I don't need the terminal then.
+So i move the new window to a new workspace and then switch to that workspace.
+With my new configuration this was not that awkward anymore, but those were still two key presses, which could be automated.
+So I did exactly that.
+Now I have three layers for switching workspaces:
+- one for switching workspaces,
+- one for moving windows to workspaces,
+- and one for moving and switching in one go
+
+todo: insert code here (only third layer)
 
 
 - one layer switching to workspace numpad-like
@@ -49,9 +65,16 @@ This kind of blew my mind, you can execute almost arbitrary C code on any key ev
 - test SS_TAP, wont compile either
 - opt for manually setting and unsetting key instead of hunting down compiler errors
 
+I showed this feature of my new keyboard to a colleague that also uses QMK for his keyboard.
+But he was only mildly impressed.
+I remember saying: "You can execute arbitrary C code on rhis thing. The possibilities are endless!"
+To which he replied: "Well but what use cases are there besides fun and games."
+And I mean he is right.
 
-new use case discovered:
-automatically generate uuidv4
+At least so I thought until I discovered a new use case:
+
+Generating UUIDs (todo: style)
+
 
 Set out to do it.
 Implemet the uuid generation code - relatively ez.
