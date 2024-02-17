@@ -22,6 +22,7 @@ With my other split keyboard this was not really safe to do.
 
 While configuring the keyboard with [Oryx, the ZSA configurator](https://configure.zsa.io/), I grew more and more frustrated.
 Since setting the color of the LEDs is very tedious.
+In Germany we call such tools "Klickibunti".
 I tried to configure my other split keyboard with QMK in C directly some time ago, but couldn't quite figure it out...
 But this time I had better motivation, so I tried again.
 

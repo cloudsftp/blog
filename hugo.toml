@@ -20,7 +20,7 @@ paginate     = 10
   keywords = "homepage, blog, cloud, linux, OSS, open source"
   images = [""]
 
-  backgroundImage = "background-images/nebula.jpg"
+  backgroundImage = "background-images/mandelbrot.jpg"
 
 [taxonomies]
     category = "blog"
