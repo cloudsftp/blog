@@ -22,43 +22,62 @@ With my other split keyboard this was not really safe to do.
 
 While configuring the keyboard with [Oryx, the ZSA configurator](https://configure.zsa.io/), I grew more and more frustrated.
 Since setting the color of the LEDs is very tedious.
-In Germany we call such tools "Klickibunti".
+In Germany, we call such tools "Klickibunti".
 I tried to configure my other split keyboard with QMK in C directly some time ago, but couldn't quite figure it out...
 But this time I had better motivation, so I tried again.
 
-todo: introduction use case first then discovery of macros
+<div style='text-align: center; font-size: 1.5em'>
+    <strong> I actually succeeded! </strong>
+</div>
 
-I actually succeeded! (todo: styling)
 I styled my RGB like I wanted and configured an extra layer to move applications between workspaces.
-Up until now i had a layer with a numpad layout and when activating that layer, the keyboard was configured to send the meta modifier with it.
-Thus telling awesome to switch to that workspace.
-When I wanted to move an application, i had to press the shift key additionally.
-But now I had an extra layer for moving applications, which made it a lot more pleasant.
+Up until now I used a layer with a numpad-like layout and when activating that layer, the keyboard was configured to send the meta modifier with the numbers that are typed.
+This was telling Awesome WM to switch to that workspace.
+When I wanted to move an application, I had to additionally press the shift key.
+But now I had an extra layer for moving applications, which sends both the meta and shift modifier alongside the number that is typed.
+This makes moving windows between workspaces a lot more pleasant.
 
-But it still was not ideal and now I was hooked.
-Sometimes, I open a GUI application from the command line, for example if i installed a new program and want to test it before setting up the `.desktop` file.
-The new window then opens next to my terminal, but I don't need the terminal then.
+But it still was not ideal, and now I was hooked on playing around with QMK.
+Sometimes, I open a GUI application from the command line.
+For example if I installed a new program and want to test it before setting up the `.desktop` file.
+The new window then opens next to my terminal.
+But I don't need the terminal at that point, and it is taking up half of the space on my monitor.
 So I move the new window to another workspace and then switch to that workspace.
-With this new setup, i still need to press four buttons to do this manneuver.
+With this new setup, I still need to press four buttons to do this maneuver.
 This could be automated, I thought.
 
 ## The discovery of macros
 
-To accomplish this, i simply need to send the same key code with different modifiers twice.
+To accomplish this, I simply need to send the same key code with different modifiers twice.
 So I looked up how to send different key codes in sequence in QMK and found [macros](https://github.com/qmk/qmk_firmware/blob/master/docs/feature_macros.md#using-macros-in-c-keymaps).
-This enables me to do exaclty what I want to do.
-!
+This is exactly what I was looking for!
 This kind of blew my mind, you can execute almost arbitrary C code on any key event and send a sequence of key codes to the computer.
 
-So I added another layer for working with workspaces with a numpad layout.
+So I added another layer for working with workspaces with a numpad-like layout.
 It gets activated when pressing the keys for the other two workspace layers at the same time.
 Now I have three layers for switching workspaces:
 - one for switching workspaces,
 - one for moving windows to workspaces,
 - and one for moving and switching in one go
 
-todo: insert code here (only third layer)
+Here is the function that gets called with a string of one character that specifies the workspace to move and switch to.
 
+```
+void move_and_switch(char *workspace, keyrecord_t *record) {
+    if (!record->event.pressed) {
+        return;
+    }
+    register_code(KC_LGUI);
+    register_code(KC_LSFT);
+    SEND_STRING(workspace);
+    unregister_code(KC_LSFT);
+    SEND_STRING(workspace);
+    unregister_code(KC_LGUI);
+}
+```
+
+I spare you the boilerplate code that calls this function.
+The gist of the implementation is setting the modifiers, sending a keystroke, removing one modifier, and sending the keystroke again.
 
 The next day, I showed this feature of my new keyboard to a colleague that also uses QMK for his keyboard.
 But he was only mildly impressed.
@@ -66,15 +85,13 @@ I remember saying: "Since you can execute arbitrary C code, the possibilities ar
 To which he replied: "Well but what use cases are there besides fun and games."
 And I mean he is right.
 
-At least so I thought until I discovered a new use case:
+At least so I thought so until I discovered a new use case:
 
 ## Generating random UUIDs
 
-Generating UUIDs (todo: style)
-
-My new job sometimes requires me ro generate random UUIDs for twsting purposes.
-Using a browser is very tedious.
-I have ro switch workspaces, open the website if it's not open yet, reload the page, copy the UUID, switch to the previous workspace, paste it awkwardly with Ctrl-Shift-V.
+My new job sometimes requires me to generate random UUIDs for twsting purposes.
+Using a browser for this task is very tedious.
+I have to switch workspaces, open the website if it's not open yet, reload the page, copy the UUID, switch to the previous workspace, and finally paste it awkwardly with Ctrl-Shift-V.
 Using `uuidgen` is slightly more convenient, but still annoying.
 
 I want something way better, generating UUIDS directly in my keyboard.
@@ -82,25 +99,37 @@ This does not have any requirement for the PC it is used with and is therefore s
 
 Set out to do it.
 Implemet the uuid generation code - relatively ez.
+
+day 1: `ffaffa`
+
 My first implementation was trash and returned gibberish, as well as being not random.
-There are two problems now:
-1. My implementation of generating UUIDs is wrong and
-2. I can't use time.h from the C standard library for entropy.
+There are three problems now:
+1. My implementation of generating UUIDs is wrong,
+2. The code is triggered twice, and
+3. I can't use `time.h` from the C standard library for entropy.
 
 The first problem is easy to fix - just implement it in a way to run it on the PC to iterate fast and also enable me to do `println`-debugging.
-The second problem is a lot nore fundamental.
+The second problem is also an easy fix - I just have to detect whether it is a key-down event or a key-up event and only trigger in one case.
+But the third problem is a lot more fundamental.
 For a second I thought, I had no way to use time as entropy.
 
-Solving the first problem was relatively easy, as i had suspected.
+Solving the first problem was relatively easy, as I had suspected.
 I moved the code to its own [library](https://github.com/cloudsftp/qmk-zsa), wrote a main function and started debugging.
 The lib was ready before long - but I still needed to get entropy from my keyboard.
 
+day 2: `0000f42d-8ccf-4646-b129-5b045db47f7`
+todo: reconstruct actual uuid?
+
 After some searching I found [timer.h of TMK](https://github.com/tmk/tmk_keyboard/blob/master/tmk_core/common/timer.h).
 For testing purposes, started the timer just before reading it for the seed.
-Sometimes the uuid string started a few characters later - this was a big success for me, since it hinted at rhe fact that I can get entropy this way.
+Sometimes the UUID string started a few characters later.
+
+todo: pic?
+
+This was a big success for me, since it hinted at the fact that I can get entropy this way.
 I just need to start the timer earlier.
 Ideally once, when the keyboard starts up.
-So I did exactly that and dound a nice place to put `timer_init()` where it gets executed once on startup and does not kill my keyboard (yes I put it in the wrong place once and the keyboard stopped working).
+So I did exactly that and found a nice place to put `timer_init()` where it gets executed once on startup and does not kill my keyboard (yes I put it in the wrong place once and the keyboard stopped working).
 
 You can use the code I wrote too!
 I put it in a [library](https://github.com/cloudsftp/qmk-uuid) with some hints at how to use it on your keyboard.
