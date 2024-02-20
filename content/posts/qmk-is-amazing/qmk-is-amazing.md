@@ -1,7 +1,7 @@
 ---
 title: "QMK is awesome"
 date: 2024-2-16:10:42+02:00
-draft: true
+draft: false
 toc: false
 images:
 tags:
@@ -89,20 +89,19 @@ At least so I thought so until I discovered a new use case:
 
 ## Generating random UUIDs
 
-My new job sometimes requires me to generate random UUIDs for twsting purposes.
+My new job sometimes requires me to generate random UUIDs for testing purposes.
 Using a browser for this task is very tedious.
 I have to switch workspaces, open the website if it's not open yet, reload the page, copy the UUID, switch to the previous workspace, and finally paste it awkwardly with Ctrl-Shift-V.
 Using `uuidgen` is slightly more convenient, but still annoying.
 
-I want something way better, generating UUIDS directly in my keyboard.
+I want something way better, generating UUIDs directly in my keyboard.
 This does not have any requirement for the PC it is used with and is therefore super portable.
+So I set out to implement it for my new keyboard.
 
-Set out to do it.
-Implemet the uuid generation code - relatively ez.
+### Day 1
 
-day 1: `ffaffa`
-
-My first implementation was trash and returned gibberish, as well as being not random.
+After my first evening of working on this feature, my keyboard wrote `ffaffa` each time I triggered the code I just wrote.
+This first implementation was trash.
 There are three problems now:
 1. My implementation of generating UUIDs is wrong,
 2. The code is triggered twice, and
@@ -117,19 +116,28 @@ Solving the first problem was relatively easy, as I had suspected.
 I moved the code to its own [library](https://github.com/cloudsftp/qmk-zsa), wrote a main function and started debugging.
 The lib was ready before long - but I still needed to get entropy from my keyboard.
 
-day 2: `0000f42d-8ccf-4646-b129-5b045db47f7`
-todo: reconstruct actual uuid?
+### Day 2
 
+After my second evening of working on this feature, my keyboard wrote `0000f42d-8ccf-4646-b129-5b045db47f7` each time I triggered the code.
+
+As you can see, the UUID is now a valid UUIDv4.
+But it is still not random at all.
 After some searching I found [timer.h of TMK](https://github.com/tmk/tmk_keyboard/blob/master/tmk_core/common/timer.h).
-For testing purposes, started the timer just before reading it for the seed.
-Sometimes the UUID string started a few characters later.
+But it was too late already, and I had work the next day.
 
-todo: pic?
+### Day 3
+
+Now it was time to put the last building block into its place.
+I used `timer_read()` instead of `time(&t)` to get the seed and had to start the timer at some other point.
+For testing purposes, I started the timer with `timer_init()` just before reading it for the seed.
+The result was that sometimes the UUID was shifted by a few characters.
 
 This was a big success for me, since it hinted at the fact that I can get entropy this way.
-I just need to start the timer earlier.
+I just needed to start the timer earlier.
 Ideally once, when the keyboard starts up.
-So I did exactly that and found a nice place to put `timer_init()` where it gets executed once on startup and does not kill my keyboard (yes I put it in the wrong place once and the keyboard stopped working).
+So I did exactly that and found a nice place to put `timer_init()` where it gets executed once on startup and does not kill my keyboard.
+(Yes I put it in the wrong place once and the keyboard stopped working at one point or another)
 
 You can use the code I wrote too!
 I put it in a [library](https://github.com/cloudsftp/qmk-uuid) with some hints at how to use it on your keyboard.
+For the code also check this library.
