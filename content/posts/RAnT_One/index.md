@@ -32,7 +32,7 @@ We are interested in how the function changes the state based on the parameter.
 
 Does it not change the state at all ($f(x) = x$)?
 This would be called a fixed point.
-Does it return to the same state after a few iterations ($f(f(...(f(x))...)) = x$) ?
+Does it return to the same state after a few iterations ($f(f(...(f(x))...)) = x$)?
 This would be called a cycle.
 Or does it behave chaotically?
 
@@ -79,7 +79,7 @@ extern "C"
 ```
 
 As you can see, I defined macros for the state, x, the parameter, a, and the output of the function, y, to make the code more readable.
-We also need to import the library \`AnT.hpp\` and export our function as the \`systemFunction\`.
+We also need to import the library `AnT.hpp` and export our function as the `systemFunction`.
 
 We then can compile the file with a bash-script that is part of Ant.
 
