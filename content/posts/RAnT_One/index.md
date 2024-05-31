@@ -4,7 +4,7 @@ date: 2024-05-31T19:49:33+02:00
 draft: true
 toc: true
 images:
-tags: 
+tags:
     - nonlinear
     - Rust
 ---
@@ -41,45 +41,51 @@ Or does it behave chaotically?
 First, we need to define the function in a way, AnT can simulate it.
 For this, we need to compile a C++ function with the signature
 
-    bool <function_name>(
-        const Array<real_t>& currentState,
-        const Array<real_t>& parameters,
-        Array<real_t>& RHS
-    )
+```C++
+bool <function_name>(
+    const Array<real_t>& currentState,
+    const Array<real_t>& parameters,
+    Array<real_t>& RHS
+)
+```
 
 to an object file.
 
 For our logistic function, we create a C++ file called \`logistic.cpp\` with the following content.
 
-    #include "AnT.hpp"
-    
-    #define a parameters[0]
-    
-    #define x currentState[0]
-    #define y RHS[0]
-    
-    bool logistic(
-        const Array<real_t>& currentState,
-        const Array<real_t>& parameters,
-        Array<real_t>& RHS
-    ) {
-        y = a * x * (1 - x);
-        return true;
+```C++
+#include "AnT.hpp"
+
+#define a parameters[0]
+
+#define x currentState[0]
+#define y RHS[0]
+
+bool logistic(
+    const Array<real_t>& currentState,
+    const Array<real_t>& parameters,
+    Array<real_t>& RHS
+) {
+    y = a * x * (1 - x);
+    return true;
+}
+
+extern "C"
+{
+    void connectSystem() {
+        MapProxy::systemFunction = logistic;
     }
-    
-    extern "C"
-    {
-        void connectSystem() {
-            MapProxy::systemFunction = logistic;
-        }
-    }
+}
+```
 
 As you can see, I defined macros for the state, x, the parameter, a, and the output of the function, y, to make the code more readable.
 We also need to import the library \`AnT.hpp\` and export our function as the \`systemFunction\`.
 
 We then can compile the file with a bash-script that is part of Ant.
 
-    TODO
+```bash
+TODO
+```
 
 ### Simulation configuration
 
@@ -87,85 +93,87 @@ Next, we need to tell Ant, how to simulate the function.
 Let&rsquo;s say we want to know the periods of the cycles at different values for the parameter $a$.
 For this, we create a new file called \`periods.ant\` with the following content.
 
-    dynamical_system = {
-      type = map,
-      name = "logistic map",
-      parameter_space_dimension = 1,
-      parameters = {
-        parameter[0] = {
-          value = 1.25,
-          name = "a"
-        }
-      },
-      state_space_dimension = 1,
-      initial_state = (0.5),
-      reset_initial_states_from_orbit = false,
-      number_of_iterations = 20000,
-      s[0] = {
-        name = "",
-        equation_of_motion = "0"
-      }
-    },
-    scan = {
-      type = nested_items,
-      mode = 1,
-      item[0] = {
-        type = real_linear,
-        points = 3000,
-        min = 0,
-        max = 4,
-        object = "a"
-      }
-    },
-    investigation_methods = {
-      general_trajectory_evaluations = {
-        is_active = false,
-        saving = {
-        },
-        min_max_values = {
-        },
-        wave_numbers = {
-        },
-        statistics = {
-        },
-        pgm_output = {
-        }
-      },
-      period_analysis = {
-        is_active = true,
-        max_period = 128,
-        compare_precision = 1e-09,
-        period = true,
-        period_file = "period.tna",
-        cyclic_asymptotic_set = false,
-        cyclic_bif_dia_file = "bif_cyclic.tna",
-        acyclic_last_states = false,
-        acyclic_bif_dia_file = "bif_acyclic.tna",
-        cyclic_graphical_iteration = false,
-        cyclic_graph_iter_file = "cyclic_cobweb.tna",
-        acyclic_graphical_iteration = false,
-        acyclic_graph_iter_file = "acyclic_cobweb.tna",
-        using_last_points = 1528,
-        period_selections = false,
-        periods_to_select = (),
-        period_selection_file = "period_selection",
-        period_selection_file_extension = "tna"
-      },
-      band_counter = {
-      },
-      symbolic_analysis = {
-      },
-      rim_analysis = {
-      },
-      symbolic_image_analysis = {
-      },
-      lyapunov_exponents_analysis = {
-      },
-      dimensions_analysis = {
-      },
-      check_for_conditions = {
-      }
+```json
+dynamical_system = {
+    type = map,
+    name = "logistic map",
+    parameter_space_dimension = 1,
+    parameters = {
+    parameter[0] = {
+        value = 1.25,
+        name = "a"
     }
+    },
+    state_space_dimension = 1,
+    initial_state = (0.5),
+    reset_initial_states_from_orbit = false,
+    number_of_iterations = 20000,
+    s[0] = {
+    name = "",
+    equation_of_motion = "0"
+    }
+},
+scan = {
+    type = nested_items,
+    mode = 1,
+    item[0] = {
+    type = real_linear,
+    points = 3000,
+    min = 0,
+    max = 4,
+    object = "a"
+    }
+},
+investigation_methods = {
+    general_trajectory_evaluations = {
+    is_active = false,
+    saving = {
+    },
+    min_max_values = {
+    },
+    wave_numbers = {
+    },
+    statistics = {
+    },
+    pgm_output = {
+    }
+    },
+    period_analysis = {
+    is_active = true,
+    max_period = 128,
+    compare_precision = 1e-09,
+    period = true,
+    period_file = "period.tna",
+    cyclic_asymptotic_set = false,
+    cyclic_bif_dia_file = "bif_cyclic.tna",
+    acyclic_last_states = false,
+    acyclic_bif_dia_file = "bif_acyclic.tna",
+    cyclic_graphical_iteration = false,
+    cyclic_graph_iter_file = "cyclic_cobweb.tna",
+    acyclic_graphical_iteration = false,
+    acyclic_graph_iter_file = "acyclic_cobweb.tna",
+    using_last_points = 1528,
+    period_selections = false,
+    periods_to_select = (),
+    period_selection_file = "period_selection",
+    period_selection_file_extension = "tna"
+    },
+    band_counter = {
+    },
+    symbolic_analysis = {
+    },
+    rim_analysis = {
+    },
+    symbolic_image_analysis = {
+    },
+    lyapunov_exponents_analysis = {
+    },
+    dimensions_analysis = {
+    },
+    check_for_conditions = {
+    }
+}
+```
 
 TODO explain
 
