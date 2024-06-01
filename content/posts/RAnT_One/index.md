@@ -51,7 +51,7 @@ bool <function_name>(
 
 to an object file.
 
-For our logistic function, we create a C++ file called \`logistic.cpp\` with the following content.
+For our logistic function, we create a C++ file called `logistic.cpp` with the following content.
 
 ```C++
 #include "AnT.hpp"
@@ -78,20 +78,20 @@ extern "C"
 }
 ```
 
-As you can see, I defined macros for the state, x, the parameter, a, and the output of the function, y, to make the code more readable.
+As you can see, we defined macros for the state, $x$, the parameter, $a$, and the output of the function, $y$, to make the code more readable.
 We also need to import the library `AnT.hpp` and export our function as the `systemFunction`.
 
-We then can compile the file with a bash-script that is part of Ant.
+We then can compile the file with a bash-script that is part of Ant by executing the following command in the directory, out function implementation source file is in.
 
 ```bash
-TODO
+/path/to/AnT/bin/build-AnT-system.sh
 ```
 
 ### Simulation configuration
 
 Next, we need to tell Ant, how to simulate the function.
-Let&rsquo;s say we want to know the periods of the cycles at different values for the parameter $a$.
-For this, we create a new file called \`periods.ant\` with the following content.
+Let's say we want to know the periods of the cycles at different values for the parameter $a$.
+For this, we create a new file called `periods.ant` with the following content.
 
 ```json
 dynamical_system = {
@@ -99,78 +99,38 @@ dynamical_system = {
     name = "logistic map",
     parameter_space_dimension = 1,
     parameters = {
-    parameter[0] = {
-        value = 1.25,
-        name = "a"
-    }
+        parameter[0] = {
+            value = 1.25,
+            name = "a"
+        }
     },
     state_space_dimension = 1,
     initial_state = (0.5),
     reset_initial_states_from_orbit = false,
     number_of_iterations = 20000,
     s[0] = {
-    name = "",
-    equation_of_motion = "0"
+        name = "",
+        equation_of_motion = "0"
     }
 },
 scan = {
     type = nested_items,
     mode = 1,
     item[0] = {
-    type = real_linear,
-    points = 3000,
-    min = 0,
-    max = 4,
-    object = "a"
+        type = real_linear,
+        points = 3000,
+        min = 0,
+        max = 4,
+        object = "a"
     }
 },
 investigation_methods = {
-    general_trajectory_evaluations = {
-    is_active = false,
-    saving = {
-    },
-    min_max_values = {
-    },
-    wave_numbers = {
-    },
-    statistics = {
-    },
-    pgm_output = {
-    }
-    },
     period_analysis = {
-    is_active = true,
-    max_period = 128,
-    compare_precision = 1e-09,
-    period = true,
-    period_file = "period.tna",
-    cyclic_asymptotic_set = false,
-    cyclic_bif_dia_file = "bif_cyclic.tna",
-    acyclic_last_states = false,
-    acyclic_bif_dia_file = "bif_acyclic.tna",
-    cyclic_graphical_iteration = false,
-    cyclic_graph_iter_file = "cyclic_cobweb.tna",
-    acyclic_graphical_iteration = false,
-    acyclic_graph_iter_file = "acyclic_cobweb.tna",
-    using_last_points = 1528,
-    period_selections = false,
-    periods_to_select = (),
-    period_selection_file = "period_selection",
-    period_selection_file_extension = "tna"
-    },
-    band_counter = {
-    },
-    symbolic_analysis = {
-    },
-    rim_analysis = {
-    },
-    symbolic_image_analysis = {
-    },
-    lyapunov_exponents_analysis = {
-    },
-    dimensions_analysis = {
-    },
-    check_for_conditions = {
+        is_active = true,
+        max_period = 128,
+        compare_precision = 1e-09,
+        period = true,
+        period_file = "period.tna"
     }
 }
 ```
@@ -183,7 +143,57 @@ TODO explain
 
 ### Executing the simulateion
 
-not that bad actually
+Executing the simulation is not that bad actually.
+We just have to call the compiled `AnT` binary and set the system function object file and the config file per command line options.
+Running `Ant` without arguments will diplay the usage instructions.
+
+```text
+--//------------/-------------------------------
+ // AnT 4.669  / Release 4c, (c) 1999-2011
+//------------/---------------------------------
+
+usage: ../../../AnT/bin/AnT <systemname> [{-i | -I | --initialization} <configfile>] [{-m | -M | --mode} <runmode>] [{-s | -S | --server} <server name>] [{-p | -P | --port} <portnumber>] [{-n | -N | --points} <scanpoints>] [{-t | -T | --time} <seconds>] [{-v | -V | --version}] [{-v | -V | --log}] [{-h | -H | --help}]
+
+<systemname>
+    complete path and filename (without extension)
+    of the shared library containing at least the system
+    function for the dynamical system to be simulated.
+
+Options:
+{-i | -I | --initialization} <initialization file>
+    complete path and filename of the initialization file
+{-m | -M | --mode} <runmode>
+    where runmode is one of 'standalone',
+    'server' or 'client'. Default is 'standalone'.
+{-s | -S | --server} <server name>
+    for runmodes 'server' and 'client' only.
+    Default is the standard hostname of the current system.
+{-p | -P | --port} <portnumber>
+    for runmodes 'server' and 'client' only.
+    The default port is 54321.
+{-n | -N | --points} <scanpoints>
+    for runmode 'client' only.
+    The number of scanpoints the client
+    should fetch from the server. Default is 50.
+{-t | -T | --time} <seconds>
+    for runmode 'client' only. The (approximate) number
+    of seconds the client should be busy before asking
+    for new scan points from the server.
+    This option overrides the '-n' option.
+{-v | -V | --version}
+{-l | -L | --log} write the log-file 'transitions.log'
+    which shows the internal structure of the current
+    simulator instantiation.
+{-h | -H | --help}
+
+Error::Exit: abnormal program termination!
+```
+
+So following these instructions, we execute the following command.
+
+```bash
+/path/to/AnT/bin/AnT logistic.so -i periods.ant
+```
 
 ### Output and figures
 
@@ -193,12 +203,55 @@ not that bad actually
 
 ## Example parallel usage
 
--   executing commands
+If we want to run scans in parallel, we have to manually start different instances of `AnT`, that run in server mode and client mode respectively.
+They need to operate on the same function implementation object file and configuration file.
+
+For example, we can start the server process with the following command.
+
+```bash
+/path/to/AnT/bin/AnT logistic.so -i periods.ant -m server -s 0.0.0.0 -p 6660 &
+```
+
+And then start one client process with
+
+```bash
+/path/to/AnT/bin/AnT logistic.so -i periods.ant -m client -s localhost -p 6660
+```
+
+Using `0.0.0.0` for the server process makes sense, since we want to bind to it.
+But for some reason, I can't use it for the client process and must instead use `localhost`.
+
+This might vary for your environment.
 
 ## Wrapper script
 
--   built-in parallelization
--   built-in image generation
+As you can see, running scans in parallel is a highly repetetive manual process.
+Of course this can be automated alongside the generation of images.
+For this, I wrote a wrapper script called `simulAnT.py` during my Masters Thesis.
+("Simulant" is german for malingerer and loosely translates to "the one who simulates".
+I think the name is especially funny, because it reminds me of [this video](https://www.youtube.com/watch?v=-ssGusoccGw) that went viral during my school days.)
+
+The source code of the script is available [here](https://github.com/cloudsftp/Masterarbeit/tree/latest/Simulation).
+If we take a look at the usage options, we see that it allows to set the number of client processes to use for the simulation, and also to only render a simple image among other options.
+This option skips the step that makes the resulting image better looking, but takes a lot of time for images with a lot of dots like plotting periods.
+
+```text
+usage: simulAnT.py [-h] -m MODEL -d DIAGRAM [-n NUM_CORES]
+                   [--simple-figure | --no-simple-figure]
+                   [--skip-computation | --no-skip-computation]
+                   [--dont-show | --no-dont-show]
+
+options:
+  -h, --help            show this help message and exit
+  -m MODEL, --model MODEL
+  -d DIAGRAM, --diagram DIAGRAM
+  -n NUM_CORES, --num-cores NUM_CORES
+  --simple-figure, --no-simple-figure
+  --skip-computation, --no-skip-computation
+  --dont-show, --no-dont-show
+```
+
+Unfortunately, this script is very convoluted and still does not provide a good user experience when creating new models or scans of models.
 
 # Ultimate goal
 
