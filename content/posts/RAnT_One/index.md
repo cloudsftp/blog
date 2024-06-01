@@ -30,11 +30,11 @@ The logistic function is famous in the field of non-linear dynamics and very sim
 It is defined as $f(x) = a x (1 - x)$ where $x$ is the state and $a$ the only parameter.
 We are interested in how the function changes the state based on the parameter.
 
-Does it not change the state at all ($f(x) = x$)?
+Does it not change the state at all $[f(x) = x]$?
 This would be called a fixed point.
-Does it return to the same state after a few iterations ($f(f(...(f(x))...)) = x$)?
+Does it return to the same state after a few iterations $[f(f(...(f(x))...)) = x]$?
 This would be called a cycle.
-Or does it behave chaotically?
+Or does it tend to infinity?
 
 ### Function implementation
 
