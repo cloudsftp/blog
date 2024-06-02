@@ -1,8 +1,8 @@
 ---
-title: "RAnT One"
+title: "RAnTing about my new Project"
 date: 2024-05-31T19:49:33+02:00
 draft: true
-toc: true
+toc: false
 images:
 tags:
     - nonlinear
@@ -93,7 +93,7 @@ Next, we need to tell Ant, how to simulate the function.
 Let's say we want to know the periods of the cycles at different values for the parameter $a$.
 For this, we create a new file called `periods.ant` with the following content.
 
-```json
+```text
 dynamical_system = {
     type = map,
     name = "logistic map",
@@ -135,13 +135,21 @@ investigation_methods = {
 }
 ```
 
-TODO explain
+As you might recognize, or rather not recognize, this is not a standardized configuration language such as `yaml` or `json`.
+Rather, it is its own configuration language.
+It has a lot more options that are not shown here for brevity.
+This configuration language can be a mouthful, especially if many of the unused options are listed ([example](https://github.com/cloudsftp/Masterarbeit/blob/latest/Simulation/Models/00_Examples/02_Logistic/bifurcation.ant)
+).
 
--   custom config language
--   mouthful
--   hard to read
+Here are the most important things, the example configuration file specifies.
+1. It specifies the dimension of the parameter space to be one and
+2. The only parameter to be $a$ with a value of $1.25$ (this value is overwritten later).
+3. It specifies the dimension of the state space to be one and
+4. the initial state to be $0.5$.
+5. Scan the function for $3,000$ points of the parameter $a$ in the range $[0, 4]$.
+6. Analyze the period of the function with a maximum period of $128$ and a precision of $1 \cdot 10^{-9}$ and write the result to a file named `period.tna`.
 
-### Executing the simulateion
+### Executing the simulation
 
 Executing the simulation is not that bad actually.
 We just have to call the compiled `AnT` binary and set the system function object file and the config file per command line options.
@@ -190,7 +198,6 @@ Error::Exit: abnormal program termination!
 ```
 
 So following these instructions, we execute the following command.
-
 ```bash
 /path/to/AnT/bin/AnT logistic.so -i periods.ant
 ```
