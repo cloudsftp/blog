@@ -284,15 +284,25 @@ options:
 
 Unfortunately, this script is very convoluted and still does not provide a good user experience when creating new models or scans of models.
 
-# Ultimate goal
+# RAnT
 
-My ultimate goal with this project is to build a library that makes it trivial to write programs that allow the user to explore the parameter space interactively.
+Now you know, what the purpose of my new project is and what pain points I am trying to avoid.
+Rather than a standalone program, RAnT is a library for developing programs that simulate and analyze system functions.
 
+My ultimate goal is to allow the user to explore scans of state spaces interactively.
+But for this, I have a long way to go.
 
-# State
+## Current State
 
--   Nice core with parallelization built-in
-    -   Effortless parallelization thanks to rayon
--   only discrete right now
-    -   core designed to be extensible
+Currently, the library supports only the analysis of periods and after how many iterations a condition is met.
+Also it only supports maps, as where AnT supports many different system function types such as ordinary differential equations and partial differential equations.
+
+But it is built with extensibility in mind.
+At least different analysis methods can be implemented without any problems as a user of the library.
+
+Thanks to [rayon](https://github.com/rayon-rs/rayon), the library supports parallelization out of the box.
+Unfortunately, the library is not designed to distribute the computations between multiple nodes, as was possible with AnT.
+Although it seems to not work anymore, at least on Linux machines.
+
+### Logistic Example
 
