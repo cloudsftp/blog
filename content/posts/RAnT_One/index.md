@@ -304,5 +304,42 @@ Thanks to [rayon](https://github.com/rayon-rs/rayon), the library supports paral
 Unfortunately, the library is not designed to distribute the computations between multiple nodes, as was possible with AnT.
 Although it seems to not work anymore, at least on Linux machines.
 
-### Logistic Example
+### Design
 
+Let's start off with the function signature of single threaded scanning function.
+
+```rust
+pub fn scan<Vector, State, Parameters, Result>(
+    vector_generator: impl VectorGenerator<Vector = Vector>,
+    parameter_adapter: impl ParameterAdapter<State, Parameters, Vector = Vector>,
+    simulate: impl Fn(State, &Parameters) -> Result,
+) -> impl Iterator<Item = (State, Parameters, Result)>
+```
+
+As you can see, it receives 3 input parameters and returns an iterator of results.
+The first parameter is called the `vector_generator`.
+It generates scan points, which are parameter agnostic at this point.
+The type of the vector is generic, to allow maximum flexibility when implementing vector generators.
+But of course, the library provides vector generators for the most common use case --- linearly distributed scan points in one or two dimensions.
+- `VectorGenerator1D`
+- `VectorGenerator2D`
+
+The second parameter is called the `parameter_adapter`.
+It translates scan vectors into an initial state and parameters.
+Again, the library provides implementations for the most common use case --- linearly distributed changes to one or multiple parameters, respectively.
+- `ParameterAdapter1DEven`
+- `ParameterAdapter2DEven`
+
+The task of providing the initial states and parameters for the scan is split into these two steps to reuse the parameter adapters for parallel scans.
+As we will see shortly, it is the responsibility of the vector generator to define, how the work is split between workers.
+
+The last parameter is called `simulate`.
+This parameter is not a struct that implements a trait as the last two parameters.
+Instead, it is a function.
+The reason for this is that it is much more performant.
+An analysis showed that embedding the logistic system function into a struct that performed period analysis was magnitudes slower than writing a simulate function, that calles a library function to perform the period analysis.
+This is because of dynamic dispatch.
+Calls to the system function are the performance bottleneck of the simulations and therefore should be optimized as much as possible.
+As mentioned before, the library provides two different analysis functions.
+- `period::simulate`
+- `condition::simulate`
