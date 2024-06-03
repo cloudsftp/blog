@@ -11,6 +11,7 @@ tags:
 
 I haven't made a post in a minute.
 So I thought I should write about the project that I just started.
+It is called "RAnT", and of course it is written in Rust.
 
 # Motivation
 
@@ -18,30 +19,30 @@ In my [Masters Thesis](https://github.com/cloudsftp/Masterarbeit/releases/tag/v1
 I had simulate the iteration of functions, as this is what is usually done in that field.
 For this I used an analysis tool, [AnT](https://github.com/cloudsftp/AnT).
 
-This tool was written years ago in C++ by my mentoring Professor among other people working at the University, I was studying at the time.
+This tool was written years ago in C++ by my supervising Professor among other people working at the University, I was studying at the time.
 I have huge respect for him, but the user experience was not very good.
 Writing my own analysis tools would have not been an option though, as I had to write my Masters Thesis.
 
 In the following examples, I will demonstrate the pain points I experienced.
 
-## Example: Simulating the logistic function on a single thread
+## Simulating the Periods of the Logistic Function
 
 The logistic function is famous in the field of non-linear dynamics and very simple, therefore I will use it in this example.
 It is defined as $f(x) = a x (1 - x)$ where $x$ is the state and $a$ the only parameter.
-We are interested in how the function changes the state based on the parameter.
+We are interested in how the function affects the state based on the parameter.
 
 Does it not change the state at all $[f(x) = x]$?
 This would be called a fixed point.
-Does it return to the same state after a few iterations $[f(f(...(f(x))...)) = x]$?
+Does it return to the same state after a number of iterations $[f(f(...(f(x))...)) = x]$?
 This would be called a cycle.
-Or does it tend to infinity?
+Does it tend toward infinity, or something else entirely?
 
-### Function implementation
+### Function Implementation
 
 First, we need to define the function in a way, AnT can simulate it.
 For this, we need to compile a C++ function with the signature
 
-```C++
+```Cpp
 bool <function_name>(
     const Array<real_t>& currentState,
     const Array<real_t>& parameters,
@@ -53,7 +54,7 @@ to an object file.
 
 For our logistic function, we create a C++ file called `logistic.cpp` with the following content.
 
-```C++
+```Cpp
 #include "AnT.hpp"
 
 #define a parameters[0]
@@ -78,10 +79,10 @@ extern "C"
 }
 ```
 
-As you can see, we defined macros for the state, $x$, the parameter, $a$, and the output of the function, $y$, to make the code more readable.
+As you can see, I defined macros for the state, $x$, the parameter, $a$, and the output of the function, $y$, to make the code more readable.
 We also need to import the library `AnT.hpp` and export our function as the `systemFunction`.
 
-We then can compile the file with a bash-script that is part of Ant by executing the following command in the directory, out function implementation source file is in.
+We then can compile the file with a bash-script that is part of AnT by executing the following command in the directory, our function implementation source file is in.
 
 ```bash
 /path/to/AnT/bin/build-AnT-system.sh
@@ -89,7 +90,7 @@ We then can compile the file with a bash-script that is part of Ant by executing
 
 ### Simulation configuration
 
-Next, we need to tell Ant, how to simulate the function.
+Next, we need to tell AnT, how to simulate the function.
 Let's say we want to know the periods of the cycles at different values for the parameter $a$.
 For this, we create a new file called `periods.ant` with the following content.
 
@@ -138,22 +139,22 @@ investigation_methods = {
 As you might recognize, or rather not recognize, this is not a standardized configuration language such as `yaml` or `json`.
 Rather, it is its own configuration language.
 It has a lot more options that are not shown here for brevity.
-This configuration language can be a mouthful, especially if many of the unused options are listed ([example](https://github.com/cloudsftp/Masterarbeit/blob/latest/Simulation/Models/00_Examples/02_Logistic/bifurcation.ant)
-).
+This configuration language can be a mouthful, especially if many of the unused options are listed ([example](https://github.com/cloudsftp/Masterarbeit/blob/latest/Simulation/Models/00_Examples/02_Logistic/bifurcation.ant)).
 
 Here are the most important things, the example configuration file specifies.
-1. It specifies the dimension of the parameter space to be one and
-2. The only parameter to be $a$ with a value of $1.25$ (this value is overwritten later).
-3. It specifies the dimension of the state space to be one and
-4. the initial state to be $0.5$.
-5. Scan the function for $3,000$ points of the parameter $a$ in the range $[0, 4]$.
-6. Analyze the period of the function with a maximum period of $128$ and a precision of $1 \cdot 10^{-9}$ and write the result to a file named `period.tna`.
+1. The dimension of the parameter space to be one and
+1. The only parameter to be $a$ with a value of $1.25$ (this value is overwritten later).
+1. The dimension of the state space to be one and
+1. The initial state to be $0.5$.
+1. The maximum number of iterations to simulate the function to be $20,000$.
+1. Scan the function for $3,000$ points of the parameter $a$ in the range $[0, 4]$.
+1. Analyze the period of the function with a maximum period of $128$ and a precision of $1 \cdot 10^{-9}$ and write the result to a file named `period.tna`.
 
 ### Executing the simulation
 
 Executing the simulation is not that bad actually.
-We just have to call the compiled `AnT` binary and set the system function object file and the config file per command line options.
-Running `Ant` without arguments will diplay the usage instructions.
+We just have to call the compiled AnT binary and set the system function object file and the config file per command line options.
+Running AnT without arguments will diplay the usage instructions.
 
 ```text
 --//------------/-------------------------------
@@ -204,19 +205,40 @@ So following these instructions, we execute the following command.
 
 ### Output and figures
 
--   example output text
--   example gnuplot program
--   example image
+Once the simulation completed, we can check the output.
 
-## Example parallel usage
+```text
+> head period.tna
+0.000000000000000e+00  1
+1.333777925975325e-03  1
+2.667555851950650e-03  1
+4.001333777925975e-03  1
+5.335111703901300e-03  1
+6.668889629876626e-03  1
+8.002667555851949e-03  1
+9.336445481827275e-03  1
+1.067022340780260e-02  1
+1.200400133377793e-02  1
+```
 
-If we want to run scans in parallel, we have to manually start different instances of `AnT`, that run in server mode and client mode respectively.
+The output consists of all the scan points in one line each.
+On the left, the value of the parameter $a$ and on the right the period of the system function at that point.
+A period of $1$ means that a fixed point exists for that value of $a$.
+
+In my Master Thesis, I used `gnuplot` to generate images from this data.
+This technique was taught to my by my supervising professor.
+As well as using `fragmaster`, `pdfcrop`, and `convert` to create better quality images from the `gnuplot` images.
+
+## Parallelization
+
+For scans with a lot more scan points and more computationally expensive system functions, this process might take a very long time.
+If we want to speed things up and run scans in parallel, we have to manually start different instances of AnT, that run in server mode and client mode respectively.
 They need to operate on the same function implementation object file and configuration file.
 
 For example, we can start the server process with the following command.
 
 ```bash
-/path/to/AnT/bin/AnT logistic.so -i periods.ant -m server -s 0.0.0.0 -p 6660 &
+/path/to/AnT/bin/AnT logistic.so -i periods.ant -m server -s "0.0.0.0" -p 6660 &
 ```
 
 And then start one client process with
@@ -227,8 +249,10 @@ And then start one client process with
 
 Using `0.0.0.0` for the server process makes sense, since we want to bind to it.
 But for some reason, I can't use it for the client process and must instead use `localhost`.
-
 This might vary for your environment.
+
+Each client process computes points of the scan on one thread.
+So if you want to use 8 threads of your CPU for the simulation, you have to start 8 client processes.
 
 ## Wrapper script
 
