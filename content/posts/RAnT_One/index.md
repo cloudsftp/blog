@@ -25,9 +25,9 @@ Writing my own analysis tools would have not been an option though, as I had to 
 
 In the following examples, I will demonstrate the pain points I experienced.
 
-## Simulating the Periods of the Logistic Function
+## Simulating the Periods of the Logistic Map
 
-The logistic function is famous in the field of non-linear dynamics and very simple, therefore I will use it in this example.
+The logistic map is famous in the field of non-linear dynamics and very simple, therefore I will use it in this example.
 It is defined as $f(x) = a x (1 - x)$ where $x$ is the state and $a$ the only parameter.
 We are interested in how the function affects the state based on the parameter.
 
@@ -52,7 +52,7 @@ bool <function_name>(
 
 to an object file.
 
-For our logistic function, we create a C++ file called `logistic.cpp` with the following content.
+For our logistic map, we create a C++ file called `logistic.cpp` with the following content.
 
 ```Cpp
 #include "AnT.hpp"
@@ -284,10 +284,13 @@ options:
 
 Unfortunately, this script is very convoluted and still does not provide a good user experience when creating new models or scans of models.
 
+;; TODO: own config language
+
 # RAnT
 
 Now you know, what the purpose of my new project is and what pain points I am trying to avoid.
 Rather than a standalone program, RAnT is a library for developing programs that simulate and analyze system functions.
+I hope to gain signigicant performance improvements by only compiling the analyses wanted and compiler optimizations of the system function in junction with the code analyzing the system function and the parameters.
 
 My ultimate goal is to allow the user to explore scans of state spaces interactively.
 But for this, I have a long way to go.
@@ -326,7 +329,7 @@ But of course, the library provides vector generators for the most common use ca
 
 The second parameter is called the `parameter_adapter`.
 It translates scan vectors into an initial state and parameters.
-Again, the library provides implementations for the most common use case --- linearly distributed changes to one or multiple parameters, respectively.
+Again, the library provides implementations for the most common use case --- linearly distributed changes to one or two parameters, respectively.
 - `ParameterAdapter1DEven`
 - `ParameterAdapter2DEven`
 
@@ -335,7 +338,7 @@ As we will see shortly, it is the responsibility of the vector generator to defi
 
 The last parameter is called `simulate`.
 This parameter is not a struct that implements a trait as the last two parameters.
-Instead, it is a function.
+Instead, it is a function that performs the simulation and analysis of the system function given an initial state and parameters.
 The reason for this is that it is much more performant.
 An analysis showed that embedding the logistic system function into a struct that performed period analysis was magnitudes slower than writing a simulate function, that calles a library function to perform the period analysis.
 This is because of dynamic dispatch.
@@ -343,3 +346,5 @@ Calls to the system function are the performance bottleneck of the simulations a
 As mentioned before, the library provides two different analysis functions.
 - `period::simulate`
 - `condition::simulate`
+
+
