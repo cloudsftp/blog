@@ -1,0 +1,84 @@
+title: clouds' Blog
+
+baseURL: https://www.cloudsftp.de/
+languageCode: en-us
+
+theme: hello-friend-ng
+paginate: 10
+params:
+  homeSubtitle: Tales from da Lab
+  description: clouds' blog and personal website
+
+  author:
+    name: Fabian Weik
+    email: fabian.weik@protonmail.com
+
+  dateform: 2006-01-02
+  dateformShort: 01-02
+  dateformNum: 2006-01-02
+  dateformNumTime: 2006-01-02 15:04
+
+  disableReadOtherPosts: true
+  enableSharingButtons: false
+  enableGlobalLanguageMenu: false
+
+  keywords: homepage, blog, cloud, linux, OSS, open source
+
+  images:
+    - ""
+
+  backgroundImage: background-images/mandelbrot.jpg
+
+  math: "true"
+
+menu:
+  main:
+    - identifier: blog
+      name: Blog
+      url: /posts
+    - identifier: about
+      name: About
+      url: /about
+
+# LaTeX math support
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+      passthrough:
+        enable: true
+        delimiters:
+          block:
+            - - \[
+              - \]
+            - - $$
+              - $$
+          inline:
+            - - \(
+              - \)
+            - - $
+              - $
+  highlight:
+    style: github-dark
+
+taxonomies:
+  category: blog
+  tag: tags
+  series: series
+
+languages:
+  en:
+    params:
+      title: clouds' Blog
+      subtitle: Tales from da Lab
+
+      keywords: homepage, blog, cloud, linux, OSS, open source
+
+      copyright: <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>
+
+      readOtherPosts: Read other posts
+
+      logo:
+        logoText: cloudsftp@website$ cd ~
+        logoHomeLink: /
