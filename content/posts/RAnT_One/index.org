@@ -1,6 +1,5 @@
 #+title: RAnTing about my new Project
-#+date: 2024-05-31T19:49:33+02:00
-#+draft: t
+#+date: 2024-06-16T21:57:10+02:00
 #+images:
 #+tags[]: nonlinear Rust
 
@@ -336,12 +335,13 @@ Again, the library provides implementations for the most common use case --- lin
 - ~ParameterAdapter2DEven~
 
 The task of providing the initial states and parameters for the scan is split into these two steps to reuse the parameter adapters for parallel scans.
-As we will see shortly, it is the responsibility of the vector generator to define, how the work is split between workers.
+It is the responsibility of the vector generator to define how the work is split between workers by providing a ~ParallelIterator~ of chunks of scan points.
+These chunks of scan points are normal ~Iterators~ of scan points.
 
 The last parameter is called ~simulate~.
 This parameter is not a struct that implements a trait as the last two parameters.
 Instead, it is a function that performs the simulation and analysis of the system function given an initial state and parameters.
-The reason for this is that it is much more performant.
+The reason for this difference is performance.
 An analysis showed that embedding the logistic system function into a struct that performed period analysis was magnitudes slower than writing a simulate function, that calles a library function to perform the period analysis.
 This is because of dynamic dispatch.
 Calls to the system function are the performance bottleneck of the simulations and therefore should be optimized as much as possible.
@@ -349,6 +349,14 @@ As mentioned before, the library provides two different analysis functions.
 - ~period::simulate~
 - ~condition::simulate~
 
+You can call these functions in your own custom ~simulate~ function, passing in your system function.
+
 *** Sketch
 
 I have to wrap up this post, so here is a quick sketch of the design described above.
+
+#+attr_org: :width 500px
+#+attr_html: :width 70% :align center
+[[./design.png]]
+
+*Stay tuned for my next RAnT!*
