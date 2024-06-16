@@ -17,7 +17,7 @@ I had simulate the iteration of functions, as this is what is usually done in th
 For this I used an analysis tool, [[https://github.com/cloudsftp/AnT][AnT]].
 
 This tool was written years ago in C++ by my supervising Professor among other people working at the University, I was studying at the time.
-I have huge respect for him, but the user experience was not very good.
+Due to the age of the software, its user experience was not that great.
 Writing my own analysis tools would have not been an option though, as I had to write my Masters Thesis.
 
 In the following examples, I will demonstrate the pain points I experienced.
@@ -33,6 +33,7 @@ This would be called a fixed point.
 Does it return to the same state after a number of iterations $[f(f(...(f(x))...)) = x]$?
 This would be called a cycle.
 Does it tend toward infinity, or something else entirely?
+We might not find out, unless we simulate it!
 
 *** Function Implementation
 
@@ -49,7 +50,7 @@ bool <function_name>(
 
 to an object file.
 
-For our logistic map, we create a C++ file called `logistic.cpp` with the following content.
+For our logistic map, we create a C++ file called ~logistic.cpp~ with the following content.
 
 #+begin_src cpp
 #include "AnT.hpp"
@@ -77,9 +78,9 @@ extern "C"
 #+end_src
 
 As you can see, I defined macros for the state, $x$, the parameter, $a$, and the output of the function, $y$, to make the code more readable.
-We also need to import the library `AnT.hpp` and export our function as the `systemFunction`.
+We also need to import the library ~AnT.hpp~ and export our function as the ~systemFunction~.
 
-We then can compile the file with a bash-script that is part of AnT by executing the following command in the directory, our function implementation source file is in.
+We then can compile the file with a bash script that is part of AnT by executing the following command in the directory, our function implementation source file is in.
 
 #+begin_src bash
 /path/to/AnT/bin/build-AnT-system.sh
@@ -89,7 +90,7 @@ We then can compile the file with a bash-script that is part of AnT by executing
 
 Next, we need to tell AnT, how to simulate the function.
 Let's say we want to know the periods of the cycles at different values for the parameter $a$.
-For this, we create a new file called `periods.ant` with the following content.
+For this, we create a new file called ~periods.ant~ with the following content.
 
 #+begin_src
 dynamical_system = {
@@ -133,10 +134,10 @@ investigation_methods = {
 }
 #+end_src
 
-As you might recognize, or rather not recognize, this is not a standardized configuration language such as `yaml` or `json`.
+As you might recognize, or rather not recognize, this is not a standardized configuration language such as ~yaml~ or ~json~.
 Rather, it is its own configuration language.
 It has a lot more options that are not shown here for brevity.
-This configuration language can be a mouthful, especially if many of the unused options are listed ([example](https://github.com/cloudsftp/Masterarbeit/blob/latest/Simulation/Models/00_Examples/02_Logistic/bifurcation.ant)).
+This configuration language can be a mouthful, especially if many of the unused options are listed ([[https://github.com/cloudsftp/Masterarbeit/blob/latest/Simulation/Models/00_Examples/02_Logistic/bifurcation.ant][example]]).
 
 Here are the most important things, the example configuration file specifies.
 1. The dimension of the parameter space to be one and
@@ -144,10 +145,10 @@ Here are the most important things, the example configuration file specifies.
 1. The dimension of the state space to be one and
 1. The initial state to be $0.5$.
 1. The maximum number of iterations to simulate the function to be $20,000$.
-1. Scan the function for $3,000$ points of the parameter $a$ in the range $[0, 4]$.
-1. Analyze the period of the function with a maximum period of $128$ and a precision of $1 \cdot 10^{-9}$ and write the result to a file named `period.tna`.
+1. To scan the function for $3,000$ points of the parameter $a$ in the range $[0, 4]$.
+1. To analyze the period of the function with a maximum period of $128$ and a precision of $1 \cdot 10^{-9}$ and write the result to a file named ~period.tna~.
 
-*** Executing the simulation
+*** Executing the Simulation
 
 Executing the simulation is not that bad actually.
 We just have to call the compiled AnT binary and set the system function object file and the config file per command line options.
@@ -201,7 +202,7 @@ So following these instructions, we execute the following command.
 /path/to/AnT/bin/AnT logistic.so -i periods.ant
 #+end_src
 
-*** Output and figures
+*** Output and Figures
 
 Once the simulation completed, we can check the output.
 
@@ -223,14 +224,15 @@ The output consists of all the scan points in one line each.
 On the left, the value of the parameter $a$ and on the right the period of the system function at that point.
 A period of $1$ means that a fixed point exists for that value of $a$.
 
-In my Master Thesis, I used `gnuplot` to generate images from this data.
+In my Master Thesis, I used ~gnuplot~ to generate images from this data.
 This technique was taught to my by my supervising professor.
-As well as using `fragmaster`, `pdfcrop`, and `convert` to create better quality images from the `gnuplot` images.
+As well as using ~fragmaster~, ~pdfcrop~, and ~convert~ to create better quality images from the ~gnuplot~ images.
 
 ** Parallelization
 
 For scans with a lot more scan points and more computationally expensive system functions, this process might take a very long time.
-If we want to speed things up and run scans in parallel, we have to manually start different instances of AnT, that run in server mode and client mode respectively.
+If we want to speed things up and run scans in parallel, we have to manually start different instances of AnT.
+Those instances run in server mode and client mode respectively.
 They need to operate on the same function implementation object file and configuration file.
 
 For example, we can start the server process with the following command.
@@ -245,8 +247,8 @@ And then start one client process with
 /path/to/AnT/bin/AnT logistic.so -i periods.ant -m client -s localhost -p 6660
 #+end_src
 
-Using `0.0.0.0` for the server process makes sense, since we want to bind to it.
-But for some reason, I can't use it for the client process and must instead use `localhost`.
+Using ~0.0.0.0~ for the server process makes sense, since we want to bind to it.
+But for some reason, I can't use it for the client process and must instead use ~localhost~.
 This might vary for your environment.
 
 Each client process computes points of the scan on one thread.
@@ -256,11 +258,11 @@ So if you want to use 8 threads of your CPU for the simulation, you have to star
 
 As you can see, running scans in parallel is a highly repetetive manual process.
 Of course this can be automated alongside the generation of images.
-For this, I wrote a wrapper script called `simulAnT.py` during my Masters Thesis.
+For this, I wrote a wrapper script called ~simulAnT.py~ during my Masters Thesis.
 ("Simulant" is german for malingerer and loosely translates to "the one who simulates".
-I think the name is especially funny, because it reminds me of [this video](https://www.youtube.com/watch?v=-ssGusoccGw) that went viral during my school days.)
+I think the name is especially funny, because it reminds me of [[https://www.youtube.com/watch?v=-ssGusoccGw][this video]] that went viral during my school days.)
 
-The source code of the script is available [here](https://github.com/cloudsftp/Masterarbeit/tree/latest/Simulation).
+The source code of the script is available [[https://github.com/cloudsftp/Masterarbeit/tree/latest/Simulation][here]].
 If we take a look at the usage options, we see that it allows to set the number of client processes to use for the simulation, and also to only render a simple image among other options.
 This option skips the step that makes the resulting image better looking, but takes a lot of time for images with a lot of dots like plotting periods.
 
@@ -280,15 +282,16 @@ options:
   --dont-show, --no-dont-show
 #+end_src
 
-Unfortunately, this script is very convoluted and still does not provide a good user experience when creating new models or scans of models.
-
-;; TODO: own config language
+The script also reads the configuration for the scans and for the pictures from a ~json~ file.
+This means there is another semo-custom configuration language involved.
+As you can see, this script is very convoluted and still does not provide a good user experience when creating new models or scans of models.
 
 * RAnT
 
 Now you know, what the purpose of my new project is and what pain points I am trying to avoid.
 Rather than a standalone program, RAnT is a library for developing programs that simulate and analyze system functions.
-I hope to gain signigicant performance improvements by only compiling the analyses wanted and compiler optimizations of the system function in junction with the code analyzing the system function and the parameters.
+I hope to gain signigicant performance improvements by only compiling the analyses wanted.
+Furthermore, the compiler hopefully optimizes the result by compiling the analyzing function toghether with the system function.
 
 My ultimate goal is to allow the user to explore scans of state spaces interactively.
 But for this, I have a long way to go.
@@ -299,9 +302,9 @@ Currently, the library supports only the analysis of periods and after how many 
 Also it only supports maps, as where AnT supports many different system function types such as ordinary differential equations and partial differential equations.
 
 But it is built with extensibility in mind.
-At least different analysis methods can be implemented without any problems as a user of the library.
+At least different analysis methods can be implemented without any problems as a user of the library right now.
 
-Thanks to [rayon](https://github.com/rayon-rs/rayon), the library supports parallelization out of the box.
+Thanks to [[https://github.com/rayon-rs/rayon][rayon]], the library supports parallelization out of the box.
 Unfortunately, the library is not designed to distribute the computations between multiple nodes, as was possible with AnT.
 Although it seems to not work anymore, at least on Linux machines.
 
@@ -319,23 +322,23 @@ pub fn scan<Vector, State, Parameters, Result>(
 #+end_src
 
 As you can see, it receives 3 input parameters and returns an iterator of results.
-The first parameter is called the `vector_generator`.
+The first parameter is called the ~vector_generator~.
 It generates scan points, which are parameter agnostic at this point.
 The type of the vector is generic, to allow maximum flexibility when implementing vector generators.
 But of course, the library provides vector generators for the most common use case --- linearly distributed scan points in one or two dimensions.
-- `VectorGenerator1D`
-- `VectorGenerator2D`
+- ~VectorGenerator1D~
+- ~VectorGenerator2D~
 
-The second parameter is called the `parameter_adapter`.
+The second parameter is called the ~parameter_adapter~.
 It translates scan vectors into an initial state and parameters.
 Again, the library provides implementations for the most common use case --- linearly distributed changes to one or two parameters, respectively.
-- `ParameterAdapter1DEven`
-- `ParameterAdapter2DEven`
+- ~ParameterAdapter1DEven~
+- ~ParameterAdapter2DEven~
 
 The task of providing the initial states and parameters for the scan is split into these two steps to reuse the parameter adapters for parallel scans.
 As we will see shortly, it is the responsibility of the vector generator to define, how the work is split between workers.
 
-The last parameter is called `simulate`.
+The last parameter is called ~simulate~.
 This parameter is not a struct that implements a trait as the last two parameters.
 Instead, it is a function that performs the simulation and analysis of the system function given an initial state and parameters.
 The reason for this is that it is much more performant.
@@ -343,7 +346,9 @@ An analysis showed that embedding the logistic system function into a struct tha
 This is because of dynamic dispatch.
 Calls to the system function are the performance bottleneck of the simulations and therefore should be optimized as much as possible.
 As mentioned before, the library provides two different analysis functions.
-- `period::simulate`
-- `condition::simulate`
+- ~period::simulate~
+- ~condition::simulate~
 
+*** Sketch
 
+I have to wrap up this post, so here is a quick sketch of the design described above.
