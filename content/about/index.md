@@ -8,5 +8,6 @@ A software engineer from Germany.
 I studied Computer Science at the [University of Stuttgart](https://www.uni-stuttgart.de/) until 2023.
 
 Currently, I am working for [mittwald](https://mittwald.de), a web-hosting provider that specializes in agencies.
+Currently, I am pursuing my PhD in Kaiserslautern at the [RPTU](https://rptu.de/en/) in cooperation with the [Fraunhofer ITWM](https://www.itwm.fraunhofer.de/en.html).
 You can read my whole education and work history [here](WeikFabian_CurriculumVitae.pdf).
 
