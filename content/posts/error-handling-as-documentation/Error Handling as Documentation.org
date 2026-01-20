@@ -1,0 +1,160 @@
+#+title: Error Handling As Documentation
+#+date: <2026-01-20 Tue 21:40>
+
+Before we talk about documentation, let me introduce you to the concept of errors as values first.
+
+* Errors as values
+
+I'm a big fan of this approach to error handling.
+Unfortunately, not a lot of languages use this as the canon way to handle errors.
+
+The big 2 modern ones that do are Rust and Golang.
+While Rust uses enums, which is a whole other great topic, Golang uses a tuple approach.
+
+** Rust
+
+Here is a small Rust example with a hello world function that might fail if a condition is not met.
+The =anyhow= crate is very helpful when working with errors.
+
+#+begin_src rust
+use anyhow::{anyhow, Error};
+
+pub fn hello_world() -> Result<String, Error> {
+    if some_condition() {
+        Ok(String::from("Hello, world!"))
+    } else {
+        Err(anyhow!("condition not met, sorry"))
+    }
+}
+#+end_src
+
+As you can see, we return the =Ok(_)= variant of the =Result= enum with a string inside.
+Otherwise, we return ther =Err(_)= variant of the =Result= enum with an error inside.
+Enums are very powerful and are built into the foundations of Rust.
+A similar enum is the =Option= enum with its =Some(_)= and =None= variants.
+
+When calling fallible functions in other functions, you can use the handy =?= operator to return early.
+Otherwise, the function will continue executing.
+
+#+begin_src rust
+use anyhow::Error;
+
+fn main() -> Result<(), Error> {
+    let message = hello_world()?;
+    
+    println!("{}", message);
+
+    Ok(())
+}
+#+end_src
+
+** Golang
+
+If this is your first time reading Rust code, the above example might be hard to understand.
+The following Golang code will achieve the same thing and might give you a better idea of what is happening in the Rust example.
+
+#+begin_src go
+import fmt
+
+func HelloWorld() (string, error) {
+	if someCondition() {
+		return "Hello, world!", nil
+	} else {
+		return "", fmt.Errorf("condition not met, sorry")
+	}
+}
+#+end_src
+
+As you can see, we now return a tuple of two values, a string and an error.
+If the function succeeds, we return a string and leave the error empty with a =nil=.
+Otherwise, we return an empty string and an error.
+
+Unfortunately, Golang does not provide a mechanism akin to the =?= operator in Rust.
+Here, we have to handle errors manually.
+But this also gives us the ability to add context to the error.
+
+#+begin_src go
+import fmt
+
+func main() error {
+	message, err := HelloWorld()
+	if err != nil {
+		return fmt.Errorf("could not get message: %e", err)
+	}
+
+	fmt.Println(message)
+
+	return nil
+}
+#+end_src
+
+Yes, this is canon and you can find this exact pattern littered all over Golang code bases.
+
+* Errors as Documentation
+
+The concept of adding context to errors is also available in Rust via the =Context= trait in the =anyhow= crate.
+
+#+begin_src rust
+use anyhow::{Context, Error};
+
+fn main() -> Result<(), Error> {
+    let message = hello_world().context("could not get message")?;
+    
+    println!("{}", message);
+
+    Ok(())
+}
+#+end_src
+
+If the =hello_world= function fails, we get a nice chain of errors to help us reason about, what went wrong.
+
+#+begin_src
+Error: could not get message
+
+Caused by:
+    condition not met, sorry
+#+end_src
+
+This doubles as documentation.
+A nice human readable description of what can go wrong where you can add as much context as you need.
+
+** Comments
+
+I would make the case, that this is way better than writing comments for two reasons.
+First, as pointed out before, the information is also included in the error message when a program craches.
+Second, there is a lower chance that the context is not updated when the logic is updated, than if it were a comment.
+Comments are notorious for rotting away, while the program around them evolves.
+
+** Exceptions
+
+When a language handles errors via exceptions, you can apply the same principle.
+But the compiler will not remind you that a function is fallible.
+Therefore, the technique might not be as effective.
+
+* Logging as Documentation
+
+For code that is not fallible, logging is another nice way to document your code, while improving debugability at the same time.
+
+#+begin_src rust
+use anyhow::{Context, Error};
+use log::info;
+
+fn main() -> Result<(), Error> {
+    info!("getting message");
+    let message = hello_world().context("could not get message")?;
+    
+    println!("{}", message);
+
+    Ok(())
+}
+#+end_src
+
+The same logic as for errors applies here.
+The logging messages function both as documentation, helping the developer understanding the code when looking at it.
+As well as actually modifying runtime behaviour of the program, aiding the developer understanding the dynamic behaviour of the program by printing out logging messages.
+And therefore reducing the chance of it rotting as the program around it evolves, since developers see the logs every time the program runs.
+
+#+begin_src
+2026-01-20T20:11:49.618048Z  INFO review_client: getting message
+Hello, world!
+#+end_src
