@@ -4,7 +4,8 @@ baseURL: https://www.cloudsftp.de/
 languageCode: en-us
 
 theme: hello-friend-ng
-paginate: 10
+pagination:
+  pagetSize: 10
 params:
   homeSubtitle: Tales from da Lab
   description: clouds' blog and personal website
