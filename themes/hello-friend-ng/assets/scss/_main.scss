@@ -440,6 +440,13 @@ hr {
   background-attachment: fixed;
   background-size: cover;
   background-position: center center;
+
+  background-color: #c0c0c0;
+  background-blend-mode: multiply;
+}
+
+.on-image {
+  color: #e0f0e0;
 }
 
 // Prism JS Additionals
