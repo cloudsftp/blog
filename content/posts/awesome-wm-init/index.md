@@ -123,7 +123,7 @@ I turned off my computer and went out biking with a friend.
 When I came back and just wanted to kick back and relax, maybe watch some anime.
 Instead, I was greeted with this:
 
-{{< image src="/posts/awesome-wm-init/login.jpg" alt="TTY Login Screen" position="center" style="border-radius: 8px;" >}}
+{{< image src="/posts/awesome-wm-init/login.webp" alt="TTY Login Screen" position="center" style="border-radius: 8px;" >}}
 
 <p style='text-align: center;'> <b> Not Fun. </b> </p>
 

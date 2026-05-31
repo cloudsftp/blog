@@ -28,7 +28,7 @@ params:
   images:
     - ""
 
-  backgroundImage: background-images/mandelbrot.jpg
+  backgroundImage: background-images/mandelbrot.webp
 
   math: "true"
 

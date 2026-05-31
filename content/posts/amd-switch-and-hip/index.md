@@ -28,7 +28,7 @@ reboot
 I ran all of them without encountering errors and rebooted.
 
 But then I was greeted with *this*
-![tty screen](tty_screen.jpg)
+![tty screen](tty_screen.webp)
 
 My first instinct was to remove the installed NVIDIA drivers (`zypper rm nvidia-compute-G06`) and remove the NVIDIA-specific options from the GRUB configuration.
 But this did not resolve my issue.
@@ -47,13 +47,13 @@ My plan was to put animated snowflakes over a photograph for a music mix I was p
 First, I followed [a tutorial](https://youtu.be/Wv23dh6d3oE?si=1jJ1ZWWiiYUi9U5e) that made very simple snowflakes and render times were alright.
 But in the video, the snowflakes were just hexagons.
 
-![hexagon snowflakes](HexagonSnowflakes.jpg)
+![hexagon snowflakes](HexagonSnowflakes.webp)
 
 I wanted better snowflakes tho.
 So I looked for another tutorial and found a [great one](https://youtu.be/fcDFntILn0M?si=9HsBXMqiYBGs-CKd).
 The resulting snowflakes are round and have a lot of detail to them.
 
-![high definition snowflakes](HighDefinitionSnowflakes.jpg)
+![high definition snowflakes](HighDefinitionSnowflakes.webp)
 
 ### GPU vs CPU Rendering
 
@@ -142,7 +142,7 @@ What happens if I try to render the fancy snowflakes with EEVEE?
 It turns out its possible, and the snowflakes don't look that bad.
 See the pic below.
 
-![final snowflakes](FinalSnowflakes.jpg)
+![final snowflakes](FinalSnowflakes.webp)
 
 So I went with this style for my first music mix.
 It still took a few hours to render.
