@@ -1,7 +1,7 @@
 title: clouds' Blog
 
 baseURL: https://www.cloudsftp.de/
-languageCode: en-us
+locale: en-us
 
 theme: hello-friend-ng
 pagination:
