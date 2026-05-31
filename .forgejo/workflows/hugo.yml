@@ -12,6 +12,11 @@ jobs:
     env:
       HUGO_VERSION: 0.162.1
     steps:
+      - name: Install Git LFS
+        run: |
+          apt update
+          apt install git-lfs -y
+
       - name: Install Hugo CLI
         run: |
           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-arm64.deb
