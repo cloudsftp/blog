@@ -8,7 +8,7 @@ pagination:
   pagetSize: 10
 params:
   homeSubtitle: Tales from da Lab
-  description: clouds' blog and personal website
+  description: Clouds' blog and personal website
 
   author:
     name: Fabian Weik
