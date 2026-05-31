@@ -25,6 +25,8 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+          lfs: true
+          token: ${{ forge.token }}
 
       - name: Build with Hugo
         env:
