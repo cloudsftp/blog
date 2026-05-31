@@ -1,14 +1,14 @@
 title: clouds' Blog
 
 baseURL: https://www.cloudsftp.de/
-languageCode: en-us
+locale: en-us
 
 theme: hello-friend-ng
 pagination:
   pagetSize: 10
 params:
   homeSubtitle: Tales from da Lab
-  description: clouds' blog and personal website
+  description: Clouds' blog and personal website
 
   author:
     name: Fabian Weik
@@ -28,7 +28,7 @@ params:
   images:
     - ""
 
-  backgroundImage: background-images/mandelbrot.jpg
+  backgroundImage: background-images/mandelbrot.webp
 
   math: "true"
 

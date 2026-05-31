@@ -42,7 +42,7 @@ Recently I saw a [YouTube video](https://www.youtube.com/watch?v=JFgsL5NFn_Y) by
 This reminded me of another video I saw ages ago --- I think by [Mutahar](https://www.youtube.com/@SomeOrdinaryGamers) --- about GPU sag causing black flickering.
 So I got my PC from under the table and looked inside it.
 
-{{< image src="/posts/nvidia-530-flickering/card-before-wide.jpg" alt="Bent GPU" position="center" style="border-radius: 8px;" >}}
+{{< image src="/posts/nvidia-530-flickering/card-before-wide.webp" alt="Bent GPU" position="center" style="border-radius: 8px;" >}}
 
 Yeah, it's definitely bending.
 
@@ -53,14 +53,14 @@ Somehow I came across this multiple times during my initial research into the bu
 
 To test my hypothesis, I put some of my favorite books under the graphics card for support.
 
-{{< image src="/posts/nvidia-530-flickering/card-temp-wide.jpg" alt="Books GPU" position="center" style="border-radius: 8px;" >}}
+{{< image src="/posts/nvidia-530-flickering/card-temp-wide.webp" alt="Books GPU" position="center" style="border-radius: 8px;" >}}
 
 You can clearly see that now it is not bending anymore.
 And the flickering got a lot better --- but it's still not completely gone.
 But this is not a sustainable solution.
 So I got [something from Amazon](https://www.amazon.de/-/en/dp/B0BY4NXNF9?psc=1&ref=ppx_yo2ov_dt_b_product_details).
 
-{{< image src="/posts/nvidia-530-flickering/card-final-wide.jpg" alt="Final GPU" position="center" style="border-radius: 8px;" >}}
+{{< image src="/posts/nvidia-530-flickering/card-final-wide.webp" alt="Final GPU" position="center" style="border-radius: 8px;" >}}
 
 As you can see, this is a much better solution and the card is even more straight.
 Now the flickering is almost completely gone.
