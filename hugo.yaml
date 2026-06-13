@@ -71,7 +71,7 @@ taxonomies:
 languages:
   en:
     params:
-      title: Clouds' Blog
+      title: clouds' Blog
       subtitle: Tales from da Lab
 
       keywords: homepage, blog, cloud, linux, OSS, open source

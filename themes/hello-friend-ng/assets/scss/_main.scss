@@ -436,21 +436,13 @@ hr {
 }
 
 .background-image {
-  position: relative;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
   background-position: center center;
-}
 
-.background-image::before {
-  content: "";
-  position: fixed;
-  inset: 0;
   background-color: #c0c0c0;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  z-index: 0;
+  background-blend-mode: multiply;
 }
 
 .on-image {
