@@ -133,7 +133,8 @@ Therefore, the technique might not be as effective.
 
 * Logging as Documentation
 
-For code that is not fallible, logging is another nice way to document your code, while improving debugability at the same time.
+If your code does not return errors, there is still a neat way to have documentation that is better than comments.
+Using logging instead of comments brings great benefit.
 
 #+begin_src rust
 use anyhow::{Context, Error};
@@ -149,12 +150,27 @@ fn main() -> Result<(), Error> {
 }
 #+end_src
 
-The same logic as for errors applies here.
-The logging messages function both as documentation, helping the developer understanding the code when looking at it.
-As well as actually modifying runtime behaviour of the program, aiding the developer understanding the dynamic behaviour of the program by printing out logging messages.
-And therefore reducing the chance of it rotting as the program around it evolves, since developers see the logs every time the program runs.
+This example will output the following.
 
 #+begin_src
 2026-01-20T20:11:49.618048Z  INFO review_client: getting message
 Hello, world!
 #+end_src
+
+First, it improves the readability of the code.
+To the same extend that comments do.
+But again, since the logs actually have impact of the runtime behaviour (in this case the logs when the program runs) they have a greater chance of staying up-to-date.
+
+Second, it improves the debugability of the code.
+The developer simply has to adjust the log level to have a detailed log of what is happening at runtime.
+Also if a developer is debugging some tests with logs, they automatically document the code (if done right).
+
+* Conclusion
+
+I am a big fan of errors as values and I hope I could convince you of some benefits they bring to developing software.
+Also I practice a lot of =println=-debugging, which plays nice with my second point of using logging as documentation.
+
+When writing tests and debugging runtime behaviour, I often have enough context from the error message.
+The error message functions like a logical stack trace, since it includes all the error messages that are concatenated during error handling.
+This also makes it very easy to find the parts of the code where the error was first created or handeled, by simply searching parts of the error message in the whole codebase.
+If this is not enough or the code does not return any errors, I add log messages that will then become documentation.
